@@ -1,0 +1,331 @@
+{
+  "services": [
+    {
+      "id": "realdebrid",
+      "enabled": true,
+      "credentials": {}
+    },
+    {
+      "id": "alldebrid",
+      "enabled": false,
+      "credentials": {}
+    },
+    {
+      "id": "premiumize",
+      "enabled": false,
+      "credentials": {}
+    },
+    {
+      "id": "debridlink",
+      "enabled": false,
+      "credentials": {}
+    },
+    {
+      "id": "torbox",
+      "enabled": false,
+      "credentials": {}
+    },
+    {
+      "id": "offcloud",
+      "enabled": false,
+      "credentials": {}
+    },
+    {
+      "id": "putio",
+      "enabled": false,
+      "credentials": {}
+    },
+    {
+      "id": "easynews",
+      "enabled": false,
+      "credentials": {}
+    },
+    {
+      "id": "easydebrid",
+      "enabled": false,
+      "credentials": {}
+    },
+    {
+      "id": "pikpak",
+      "enabled": false,
+      "credentials": {}
+    },
+    {
+      "id": "seedr",
+      "enabled": false,
+      "credentials": {}
+    }
+  ],
+  "presets": [
+    {
+      "type": "torrentio",
+      "instanceId": "81d",
+      "enabled": true,
+      "options": {
+        "name": "Torrentio",
+        "timeout": 15000,
+        "resources": [
+          "stream",
+          "catalog",
+          "meta"
+        ],
+        "providers": [
+          "yts",
+          "eztv",
+          "rarbg",
+          "1337x",
+          "thepiratebay",
+          "kickasstorrents",
+          "torrentgalaxy",
+          "magnetdl",
+          "horriblesubs",
+          "nyaasi",
+          "tokyotosho",
+          "anidex",
+          "rutor",
+          "rutracker",
+          "comando",
+          "bludv",
+          "torrent9",
+          "ilcorsaronero",
+          "mejortorrent",
+          "wolfmax4k",
+          "cinecalidad",
+          "besttorrents"
+        ],
+        "useMultipleInstances": false
+      }
+    },
+    {
+      "type": "comet",
+      "instanceId": "09d",
+      "enabled": true,
+      "options": {
+        "name": "Comet",
+        "timeout": 15000,
+        "resources": [
+          "stream"
+        ],
+        "includeP2P": false,
+        "removeTrash": true
+      }
+    },
+    {
+      "type": "mediafusion",
+      "instanceId": "257",
+      "enabled": true,
+      "options": {
+        "name": "MediaFusion",
+        "timeout": 15000,
+        "resources": [
+          "stream",
+          "catalog",
+          "meta"
+        ],
+        "useCachedResultsOnly": true,
+        "enableWatchlistCatalogs": false,
+        "downloadViaBrowser": false,
+        "contributorStreams": false,
+        "certificationLevelsFilter": [],
+        "nudityFilter": []
+      }
+    },
+    {
+      "type": "torrentio",
+      "instanceId": "4e5",
+      "enabled": true,
+      "options": {
+        "name": "Nyaa",
+        "timeout": 15000,
+        "resources": [
+          "stream",
+          "catalog",
+          "meta"
+        ],
+        "providers": [
+          "nyaasi"
+        ],
+        "useMultipleInstances": false
+      }
+    }
+  ],
+  "formatter": {
+    "id": "custom",
+    "definition": {
+      "name": "{stream.resolution::exists[\"{stream.resolution}\"||\"\"]}{stream.regexMatched::exists[\" ({stream.regexMatched})\"||\"\"]} {stream.quality::exists[\"- {stream.quality}\"||\"Unknown\"]} {stream.encode::exists[\"- {stream.encode} \"||\"\"]}{stream.visualTags::exists[\"- {stream.visualTags::join(' | ')} \"||\"\"]}{stream.releaseGroup::exists[\"- [{stream.releaseGroup}] \"||\"\"]}",
+      "description": "📁  {stream.filename::exists[\"{stream.filename}\"||\"Unknown\"]}\n\nSize: {stream.size::>0[\"{stream.size::bytes} \"||\"\"]}{stream.duration::>0[\"| Duration: {stream.duration::time} \"||\"\"]}\n\nLanguage: {stream.languages::exists[\"{stream.languages::join(', ')}\"||\"\"]}\nAddon : {addon.name}{stream.library::istrue[\" (Your Media)\"||\"\"]} \n{stream.message::exists[\"Message: {stream.message}\"||\"\"]}"
+    }
+  },
+  "preferredQualities": [
+    "BluRay REMUX",
+    "BluRay",
+    "WEB-DL"
+  ],
+  "preferredResolutions": [
+    "2160p",
+    "1080p",
+    "720p",
+    "576p",
+    "480p"
+  ],
+  "excludedQualities": [
+    "CAM",
+    "SCR",
+    "TS",
+    "TC",
+    "HDRip",
+    "HC HD-Rip",
+    "HDTV",
+    "WEBRip"
+  ],
+  "excludedVisualTags": [
+    "3D"
+  ],
+  "sortCriteria": {
+    "global": [
+      {
+        "key": "resolution",
+        "direction": "desc"
+      },
+      {
+        "key": "size",
+        "direction": "desc"
+      }
+    ]
+  },
+  "deduplicator": {
+    "enabled": true,
+    "keys": [
+      "filename",
+      "infoHash",
+      "smartDetect"
+    ],
+    "cached": "single_result",
+    "uncached": "per_service",
+    "p2p": "single_result"
+  },
+  "proxy": {
+    "enabled": true,
+    "id": "mediaflow",
+    "proxiedAddons": [
+      "81d",
+      "09d",
+      "257",
+      "780",
+      "7c6",
+      "363",
+      "6aa",
+      "291",
+      "96b"
+    ],
+    "proxiedServices": []
+  },
+  "trusted": true,
+  "excludedResolutions": [
+    "144p",
+    "240p",
+    "360p"
+  ],
+  "includedResolutions": [],
+  "requiredResolutions": [],
+  "includedQualities": [],
+  "requiredQualities": [],
+  "excludedLanguages": [
+    "Multi",
+    "Dubbed"
+  ],
+  "includedLanguages": [],
+  "requiredLanguages": [],
+  "preferredLanguages": [],
+  "includedVisualTags": [],
+  "requiredVisualTags": [],
+  "preferredVisualTags": [
+    "HDR+DV",
+    "DV",
+    "HDR10",
+    "HDR"
+  ],
+  "excludedAudioTags": [],
+  "includedAudioTags": [],
+  "requiredAudioTags": [],
+  "preferredAudioTags": [],
+  "excludedAudioChannels": [],
+  "includedAudioChannels": [],
+  "requiredAudioChannels": [],
+  "preferredAudioChannels": [],
+  "excludedStreamTypes": [],
+  "includedStreamTypes": [],
+  "requiredStreamTypes": [],
+  "preferredStreamTypes": [],
+  "excludedEncodes": [
+    "AV1",
+    "XviD",
+    "DivX",
+    "H-OU",
+    "H-SBS",
+    "Unknown"
+  ],
+  "includedEncodes": [],
+  "requiredEncodes": [],
+  "preferredEncodes": [],
+  "excludedRegexPatterns": [
+    "(Rus|rus|RUS|Ukr|ukr|UKR|ITA|ita|Ita|iTA|FRENCH|VOSTFR|Ger|NORDiC)",
+    "[А-Яа-яЁё一-龯]"
+  ],
+  "requiredRegexPatterns": [],
+  "seederRangeTypes": [],
+  "excludeCachedFromAddons": [],
+  "excludeCachedFromServices": [],
+  "excludeCachedFromStreamTypes": [],
+  "excludeUncached": false,
+  "excludeUncachedFromAddons": [
+    "96b",
+    "780",
+    "257",
+    "09d",
+    "81d"
+  ],
+  "excludeUncachedFromServices": [],
+  "excludeUncachedFromStreamTypes": [],
+  "excludeUncachedMode": "or",
+  "excludedStreamExpressions": [
+    "language(streams, 'multi', 'dubbed')"
+  ],
+  "resultLimits": {},
+  "hideErrorsForResources": [],
+  "showStatistics": false,
+  "titleMatching": {
+    "mode": "contains",
+    "enabled": true,
+    "requestTypes": [],
+    "addons": []
+  },
+  "seasonEpisodeMatching": {
+    "requestTypes": [],
+    "addons": []
+  },
+  "catalogModifications": [
+    {
+      "id": "7c64414.st:store:rd",
+      "type": "other",
+      "name": "Store RD",
+      "shuffle": false,
+      "enabled": true,
+      "rpdb": false,
+      "hideable": true,
+      "searchable": true,
+      "addonName": "StremThru Store"
+    },
+    {
+      "id": "81d4414.torrentio-realdebrid",
+      "type": "other",
+      "name": "RealDebrid",
+      "shuffle": false,
+      "enabled": true,
+      "rpdb": false,
+      "hideable": true,
+      "searchable": false,
+      "addonName": "Torrentio"
+    }
+  ]
+}

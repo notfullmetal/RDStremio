@@ -1,0 +1,58 @@
+services:
+  aiostreams:
+    image: ghcr.io/viren070/aiostreams:latest
+    container_name: aiostreams
+    restart: unless-stopped
+    env_file:
+      - aiostreams.env
+    network_mode: "container:gluetun"
+    volumes:
+      - ./aio_data:/app/data
+    healthcheck:
+      test: wget -qO- http://localhost:3000/api/v1/status
+      interval: 1m
+      timeout: 10s
+      retries: 5
+      start_period: 10s
+
+  mediaflow-proxy:
+    image: mhdzumair/mediaflow-proxy:latest
+    container_name: mediaflow-proxy
+    restart: always
+    env_file:
+      - mediaflow.env
+    network_mode: "container:gluetun"
+    environment:
+      - PGID=1000
+      - PUID=1000
+      - TZ=Asia/Kolkata
+    logging:
+      options:
+        max-size: 1g
+
+  gluetun:
+    image: qmcgaw/gluetun
+    container_name: gluetun
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    volumes:
+      - ./gluetun-p2:/gluetun
+      - ./wg0.conf:/gluetun/wireguard/wg0.conf
+    ports:
+      - 8388:8388/tcp
+      - 8388:8388/udp
+      - 1090:1090
+      - 8888:8888
+      - 3000:3000
+    environment:
+      - PGID=1000
+      - PUID=1000
+      - TZ=Asia/Kolkata
+      - VPN_SERVICE_PROVIDER=custom
+      - VPN_TYPE=wireguard
+      - DOT=off
+      - SHADOWSOCKS=on
+      - HTTPPROXY=on
+      - HTTPPROXY_LISTENING_ADDRESS=:1090

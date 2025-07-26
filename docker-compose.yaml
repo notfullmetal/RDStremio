@@ -5,7 +5,7 @@ services:
     restart: unless-stopped
     env_file:
       - aiostreams.env
-    network_mode: "container:gluetun"
+    network_mode: "service:gluetun"
     volumes:
       - ./aio_data:/app/data
     healthcheck:
@@ -14,6 +14,8 @@ services:
       timeout: 10s
       retries: 5
       start_period: 10s
+    depends_on:
+      - gluetun
 
   mediaflow-proxy:
     image: mhdzumair/mediaflow-proxy:latest
@@ -21,7 +23,7 @@ services:
     restart: always
     env_file:
       - mediaflow.env
-    network_mode: "container:gluetun"
+    network_mode: "service:gluetun"
     environment:
       - PGID=1000
       - PUID=1000
@@ -29,6 +31,8 @@ services:
     logging:
       options:
         max-size: 1g
+    depends_on:
+      - gluetun
 
   gluetun:
     image: qmcgaw/gluetun

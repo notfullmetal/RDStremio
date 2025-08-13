@@ -147,13 +147,27 @@
         ],
         "useMultipleInstances": false
       }
+    },
+    {
+      "type": "stremthruTorz",
+      "instanceId": "18d",
+      "enabled": true,
+      "options": {
+        "name": "StremThru Torz",
+        "timeout": 15000,
+        "resources": [
+          "stream"
+        ],
+        "includeP2P": false,
+        "useMultipleInstances": false
+      }
     }
   ],
   "formatter": {
     "id": "custom",
     "definition": {
       "name": "{stream.resolution::exists[\"{stream.resolution}\"||\"\"]}{stream.regexMatched::exists[\" ({stream.regexMatched})\"||\"\"]} {stream.quality::exists[\"- {stream.quality}\"||\"Unknown\"]} {stream.encode::exists[\"- {stream.encode} \"||\"\"]}{stream.visualTags::exists[\"- {stream.visualTags::join(' | ')} \"||\"\"]}{stream.releaseGroup::exists[\"- [{stream.releaseGroup}] \"||\"\"]}",
-      "description": "📁  {stream.filename::exists[\"{stream.filename}\"||\"Unknown\"]}\n\nSize: {stream.size::>0[\"{stream.size::bytes} \"||\"\"]}{stream.duration::>0[\"| Duration: {stream.duration::time} \"||\"\"]}\n\nLanguage: {stream.languages::exists[\"{stream.languages::join(', ')}\"||\"\"]}\nAddon : {addon.name}{stream.library::istrue[\" (Your Media)\"||\"\"]} \n{stream.message::exists[\"Message: {stream.message}\"||\"\"]}"
+      "description": "📁 {stream.filename::exists[\"{stream.filename}\"||\"Unknown\"]}\n\nSize: {stream.size::>0[\"{stream.size::bytes} \"||\"\"]}{stream.duration::>0[\"| Duration: {stream.duration::time} \"||\"\"]}\n\nLanguage: {stream.languages::exists[\"{stream.languages::join(', ')}\"||\"\"]}\nAddon : {addon.name}{stream.library::istrue[\" (Your Media)\"||\"\"]} \n{stream.message::exists[\"Message: {stream.message}\"||\"\"]}"
     }
   },
   "preferredQualities": [
@@ -216,9 +230,14 @@
       "363",
       "6aa",
       "291",
-      "96b"
+      "96b",
+      "4e5",
+      "18d"
     ],
-    "proxiedServices": []
+    "proxiedServices": [
+      "realdebrid",
+      "alldebrid"
+    ]
   },
   "trusted": true,
   "excludedResolutions": [
@@ -283,7 +302,8 @@
     "780",
     "257",
     "09d",
-    "81d"
+    "81d",
+    "18d"
   ],
   "excludeUncachedFromServices": [],
   "excludeUncachedFromStreamTypes": [],
@@ -306,17 +326,6 @@
   },
   "catalogModifications": [
     {
-      "id": "7c64414.st:store:rd",
-      "type": "other",
-      "name": "Store RD",
-      "shuffle": false,
-      "enabled": true,
-      "rpdb": false,
-      "hideable": true,
-      "searchable": true,
-      "addonName": "StremThru Store"
-    },
-    {
       "id": "81d4414.torrentio-realdebrid",
       "type": "other",
       "name": "RealDebrid",
@@ -326,6 +335,17 @@
       "hideable": true,
       "searchable": false,
       "addonName": "Torrentio"
+    },
+    {
+      "id": "4e54414.torrentio-realdebrid",
+      "name": "RealDebrid",
+      "type": "other",
+      "enabled": true,
+      "shuffle": false,
+      "rpdb": true,
+      "hideable": true,
+      "searchable": false,
+      "addonName": "Nyaa"
     }
   ]
 }

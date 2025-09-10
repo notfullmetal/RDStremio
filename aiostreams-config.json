@@ -1,6 +1,11 @@
 {
   "services": [
     {
+      "id": "torbox",
+      "enabled": true,
+      "credentials": {}
+    },
+    {
       "id": "realdebrid",
       "enabled": true,
       "credentials": {}
@@ -17,11 +22,6 @@
     },
     {
       "id": "debridlink",
-      "enabled": false,
-      "credentials": {}
-    },
-    {
-      "id": "torbox",
       "enabled": false,
       "credentials": {}
     },
@@ -54,19 +54,72 @@
       "id": "seedr",
       "enabled": false,
       "credentials": {}
+    },
+    {
+      "id": "debrider",
+      "enabled": false,
+      "credentials": {}
     }
   ],
   "presets": [
+    {
+      "type": "comet",
+      "instanceId": "09d",
+      "enabled": true,
+      "options": {
+        "name": "Comet",
+        "timeout": 5000,
+        "resources": [
+          "stream"
+        ],
+        "includeP2P": false,
+        "removeTrash": true,
+        "url": "https://cometfortheweebs.midnightignite.me/"
+      }
+    },
+    {
+      "type": "mediafusion",
+      "instanceId": "257",
+      "enabled": true,
+      "options": {
+        "name": "MediaFusion",
+        "timeout": 5000,
+        "resources": [
+          "stream",
+          "meta"
+        ],
+        "useCachedResultsOnly": true,
+        "enableWatchlistCatalogs": false,
+        "downloadViaBrowser": false,
+        "contributorStreams": false,
+        "certificationLevelsFilter": [],
+        "nudityFilter": [],
+        "url": "https://mediafusionfortheweebs.midnightignite.me/"
+      }
+    },
+    {
+      "type": "stremthruTorz",
+      "instanceId": "770",
+      "enabled": true,
+      "options": {
+        "name": "Strem Torz",
+        "timeout": 5000,
+        "resources": [
+          "stream"
+        ],
+        "includeP2P": false,
+        "useMultipleInstances": false
+      }
+    },
     {
       "type": "torrentio",
       "instanceId": "81d",
       "enabled": true,
       "options": {
         "name": "Torrentio",
-        "timeout": 15000,
+        "timeout": 5000,
         "resources": [
           "stream",
-          "catalog",
           "meta"
         ],
         "providers": [
@@ -93,73 +146,23 @@
           "cinecalidad",
           "besttorrents"
         ],
-        "useMultipleInstances": false
+        "useMultipleInstances": true
       }
     },
     {
-      "type": "comet",
-      "instanceId": "09d",
+      "type": "custom",
+      "instanceId": "e36",
       "enabled": true,
       "options": {
-        "name": "Comet",
-        "timeout": 15000,
+        "name": "Nyaa.si",
+        "manifestUrl": "https://torrentio.strem.fun/providers=nyaasi|sort=qualitysize/manifest.json",
+        "libraryAddon": false,
+        "resultPassthrough": false,
+        "forceToTop": false,
+        "timeout": 5000,
         "resources": [
           "stream"
-        ],
-        "includeP2P": false,
-        "removeTrash": true
-      }
-    },
-    {
-      "type": "mediafusion",
-      "instanceId": "257",
-      "enabled": true,
-      "options": {
-        "name": "MediaFusion",
-        "timeout": 15000,
-        "resources": [
-          "stream",
-          "catalog",
-          "meta"
-        ],
-        "useCachedResultsOnly": true,
-        "enableWatchlistCatalogs": false,
-        "downloadViaBrowser": false,
-        "contributorStreams": false,
-        "certificationLevelsFilter": [],
-        "nudityFilter": []
-      }
-    },
-    {
-      "type": "torrentio",
-      "instanceId": "4e5",
-      "enabled": true,
-      "options": {
-        "name": "Nyaa",
-        "timeout": 15000,
-        "resources": [
-          "stream",
-          "catalog",
-          "meta"
-        ],
-        "providers": [
-          "nyaasi"
-        ],
-        "useMultipleInstances": false
-      }
-    },
-    {
-      "type": "stremthruTorz",
-      "instanceId": "18d",
-      "enabled": true,
-      "options": {
-        "name": "StremThru Torz",
-        "timeout": 15000,
-        "resources": [
-          "stream"
-        ],
-        "includeP2P": false,
-        "useMultipleInstances": false
+        ]
       }
     }
   ],
@@ -167,7 +170,7 @@
     "id": "custom",
     "definition": {
       "name": "{stream.resolution::exists[\"{stream.resolution}\"||\"\"]}{stream.regexMatched::exists[\" ({stream.regexMatched})\"||\"\"]} {stream.quality::exists[\"- {stream.quality}\"||\"Unknown\"]} {stream.encode::exists[\"- {stream.encode} \"||\"\"]}{stream.visualTags::exists[\"- {stream.visualTags::join(' | ')} \"||\"\"]}{stream.releaseGroup::exists[\"- [{stream.releaseGroup}] \"||\"\"]}",
-      "description": "📁 {stream.filename::exists[\"{stream.filename}\"||\"Unknown\"]}\n\nSize: {stream.size::>0[\"{stream.size::bytes} \"||\"\"]}{stream.duration::>0[\"| Duration: {stream.duration::time} \"||\"\"]}\n\nLanguage: {stream.languages::exists[\"{stream.languages::join(', ')}\"||\"\"]}\nAddon : {addon.name}{stream.library::istrue[\" (Your Media)\"||\"\"]} \n{stream.message::exists[\"Message: {stream.message}\"||\"\"]}"
+      "description": "📁 {stream.filename::exists[\"{stream.filename}\"||\"Unknown\"]} \n\nSize: {stream.size::>0[\"{stream.size::bytes} \"||\"\"]}{stream.duration::>0[\"| Duration: {stream.duration::time} \"||\"\"]} \n\nLanguage: {stream.languages::exists[\"{stream.languages::join(', ')}\"||\"\"]}\nAddon : {addon.name}{stream.library::istrue[\" (Your Media)\"||\"\"]}{service.shortName::exists[\" | {service.shortName}\"||\"\"]}\n{stream.message::exists[\"Message: {stream.message}\"||\"\"]}"
     }
   },
   "preferredQualities": [
@@ -209,34 +212,22 @@
   },
   "deduplicator": {
     "enabled": true,
+    "multiGroupBehaviour": "aggressive",
     "keys": [
       "filename",
-      "infoHash",
-      "smartDetect"
+      "infoHash"
     ],
-    "cached": "single_result",
+    "cached": "per_service",
     "uncached": "per_service",
     "p2p": "single_result"
   },
   "proxy": {
     "enabled": true,
-    "id": "mediaflow",
-    "proxiedAddons": [
-      "81d",
-      "09d",
-      "257",
-      "780",
-      "7c6",
-      "363",
-      "6aa",
-      "291",
-      "96b",
-      "4e5",
-      "18d"
-    ],
+    "id": "stremthru",
+    "publicIp": "150.136.246.250",
+    "proxiedAddons": [],
     "proxiedServices": [
-      "realdebrid",
-      "alldebrid"
+      "realdebrid"
     ]
   },
   "trusted": true,
@@ -262,7 +253,8 @@
     "HDR+DV",
     "DV",
     "HDR10",
-    "HDR"
+    "HDR",
+    "SDR"
   ],
   "excludedAudioTags": [],
   "includedAudioTags": [],
@@ -281,14 +273,13 @@
     "XviD",
     "DivX",
     "H-OU",
-    "H-SBS",
-    "Unknown"
+    "H-SBS"
   ],
   "includedEncodes": [],
   "requiredEncodes": [],
   "preferredEncodes": [],
   "excludedRegexPatterns": [
-    "(Rus|rus|RUS|Ukr|ukr|UKR|ITA|ita|Ita|iTA|FRENCH|VOSTFR|Ger|NORDiC)",
+    "\\b(Rus|rus|RUS|Ukr|ukr|UKR|ITA|ita|Ita|iTA|FRENCH|VOSTFR|Ger|NORDiC|PT-BR|PT|BR|Ben The Men|BEN THE MEN|.exe|.iso)\\b",
     "[А-Яа-яЁё一-龯]"
   ],
   "requiredRegexPatterns": [],
@@ -300,10 +291,15 @@
   "excludeUncachedFromAddons": [
     "96b",
     "780",
-    "257",
     "09d",
     "81d",
-    "18d"
+    "6fd",
+    "176",
+    "18d",
+    "0df",
+    "257",
+    "ea1",
+    "770"
   ],
   "excludeUncachedFromServices": [],
   "excludeUncachedFromStreamTypes": [],
@@ -312,8 +308,16 @@
     "language(streams, 'multi', 'dubbed')"
   ],
   "resultLimits": {},
-  "hideErrorsForResources": [],
+  "hideErrors": false,
+  "hideErrorsForResources": [
+    "addon_catalog",
+    "catalog"
+  ],
   "showStatistics": false,
+  "yearMatching": {
+    "requestTypes": [],
+    "addons": []
+  },
   "titleMatching": {
     "mode": "contains",
     "enabled": true,
@@ -324,28 +328,41 @@
     "requestTypes": [],
     "addons": []
   },
+  "autoPlay": {
+    "attributes": [
+      "service",
+      "proxied",
+      "resolution",
+      "quality",
+      "encode",
+      "audioTags",
+      "visualTags",
+      "languages",
+      "releaseGroup"
+    ]
+  },
   "catalogModifications": [
     {
-      "id": "81d4414.torrentio-realdebrid",
-      "type": "other",
-      "name": "RealDebrid",
+      "id": "e35e3b0.usa",
+      "type": "tv",
+      "name": "USA TV",
       "shuffle": false,
       "enabled": true,
-      "rpdb": false,
-      "hideable": true,
-      "searchable": false,
-      "addonName": "Torrentio"
-    },
-    {
-      "id": "4e54414.torrentio-realdebrid",
-      "name": "RealDebrid",
-      "type": "other",
-      "enabled": true,
-      "shuffle": false,
       "rpdb": true,
       "hideable": true,
       "searchable": false,
-      "addonName": "Nyaa"
+      "addonName": "Debridio TV"
+    },
+    {
+      "id": "e35e3b0.uk",
+      "type": "tv",
+      "name": "UK TV",
+      "shuffle": false,
+      "enabled": true,
+      "rpdb": true,
+      "hideable": true,
+      "searchable": false,
+      "addonName": "Debridio TV"
     }
   ]
 }

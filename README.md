@@ -1,6 +1,6 @@
-# Real-Debrid + Mediaflow + AIOStreams Deployment Guide
+# Real-Debrid + StremThru + AIOStreams Deployment Guide
 
-This guide will walk you through the process of deploying the Real-Debrid + Mediaflow + AIOStreams project. Please follow each step carefully to ensure a successful setup.
+This guide will walk you through the process of deploying the Real-Debrid + StremThru + AIOStreams project. Please follow each step carefully to ensure a successful setup.
 
 ---
 
@@ -22,14 +22,32 @@ Open the `aiostreams.env` file in your project directory. You **must** edit the 
 
 ---
 
-## 2. Set Password in `mediaflow.env`
+## 2. Configure StremThru Environment Variables
 
-Open the `mediaflow.env` file and set a strong password for the MediaFlow service. This is important for securing your stream proxy.
+Open the `stremthru.env` file and configure the StremThru service settings. This file contains various proxy and authentication configurations for your stream proxy.
 
-- Example:
-  ```env
-  API_PASSWORD=your_mediaflow_password
-  ```
+### StremThru Environment Variables Syntax:
+
+The `stremthru.env` file uses the following syntax:
+
+- **STREMTHRU_HTTP_PROXY**: HTTP proxy URL for routing traffic (leave empty if not using)
+- **STREMTHRU_TUNNEL**: Tunnel configuration for secure connections
+- **STREMTHRU_PROXY_AUTH**: Proxy authentication in `user:password` format
+- **STREMTHRU_STORE_AUTH**: Storage authentication in `user:service:API_KEY` format
+- **STREMTHRU_PEER_URI**: Peer connection URI for distributed streaming
+- **STREMTHRU_REDIS_URI**: Redis connection URI for caching
+- **STREMTHRU_DATABASE_URI**: Database connection string (PostgreSQL or SQLite)
+
+**Example configuration:**
+```env
+STREMTHRU_HTTP_PROXY=
+STREMTHRU_TUNNEL=
+STREMTHRU_PROXY_AUTH=user:your_password
+STREMTHRU_STORE_AUTH=user:realdebrid:your_api_key
+STREMTHRU_PEER_URI=
+STREMTHRU_REDIS_URI=
+STREMTHRU_DATABASE_URI=postgresql://user:password@localhost:5432/stremthru
+```
 
 ---
 
@@ -38,7 +56,7 @@ Open the `mediaflow.env` file and set a strong password for the MediaFlow servic
 To route traffic securely, you need to add your VPN's WireGuard configuration file to the project directory:
 
 - Obtain your `wg0.conf` file from your VPN provider.
-- Place the `wg0.conf` file in the **same directory** as your other environment files (`aiostreams.env`, `mediaflow.env`).
+- Place the `wg0.conf` file in the **same directory** as your other environment files (`aiostreams.env`, `stremthru.env`).
 - This file will be used by the Docker containers to establish a secure VPN connection.
 
 ---
@@ -59,9 +77,81 @@ Once all configuration files are set up, you can deploy the project using Docker
    docker compose logs -f
    ```
 
+4. **Verify Service Availability:**
+   - **AIOStreams** will be available on **port 3000** (accessible at `http://localhost:3000` or your configured domain)
+   - **StremThru Proxy** will be available on **port 8787** (accessible at `http://localhost:8787`)
+
 ---
 
-## 5. Import AIOStreams Configuration
+## 5. Add StremThru Proxy to AIOStreams
+
+Before importing your AIOStreams configuration, you need to configure the StremThru proxy settings:
+
+1. **Access the AIOStreams Web Interface:**
+   - Open your browser and navigate to `http://localhost:3000` (or your configured domain)
+   - Log in using your configured credentials
+
+2. **Navigate to the Proxy Settings:**
+   - In the AIOStreams interface, go to the **"Proxy"** tab
+   - Look for the proxy configuration section
+
+3. **Add StremThru Proxy Configuration:**
+   - **Proxy URL**: Enter `http://stremthru:8080` (internal Docker network address)
+   - **Proxy Password**: Enter the password you configured in `STREMTHRU_PROXY_AUTH` (format: `user:password`)
+   - **Alternative External URL**: If accessing from outside Docker, use `http://localhost:8787`
+
+4. **Save the Configuration:**
+   - Click the **"Save"** or **"Apply"** button to save your proxy settings
+   - The proxy configuration will be used for routing your streaming requests through StremThru
+
+**Note:** Ensure StremThru is running and properly configured before adding it to AIOStreams. You can verify StremThru is working by accessing `http://localhost:8787` in your browser.
+
+---
+
+## 5.5. Configure Real-Debrid and Torbox Services
+
+Before importing your AIOStreams configuration, you need to set up your Real-Debrid and Torbox credentials:
+
+### Real-Debrid Setup:
+
+1. **Create Real-Debrid Account:**
+   - Visit [real-debrid.com](https://real-debrid.com) and create an account
+   - Purchase a premium subscription (required for debrid services)
+
+2. **Get Your API Key:**
+   - Log in to your Real-Debrid account
+   - Go to **Settings** → **API** → **Generate API Key**
+   - Copy your API key (it will look like: `ABCDEFGHIJKLMNOPQRSTUVWXYZ123456`)
+
+3. **Add Credentials to AIOStreams:**
+   - Access the AIOStreams web interface at `http://localhost:3000`
+   - Navigate to the **"Services"** tab
+   - Find **Real-Debrid** in the list of services
+   - Click **"Configure"** or **"Add"**
+   - Enter your Real-Debrid API key
+   - Click **"Save"** or **"Test Connection"** to verify
+
+### Torbox Setup:
+
+1. **Create Torbox Account:**
+   - Visit [torbox.app](https://torbox.app) and create an account
+   - Purchase a premium subscription
+
+2. **Get Your API Key:**
+   - Log in to your Torbox account
+   - Go to **Settings** → **API** → **Generate API Token**
+   - Copy your API token
+
+3. **Add Credentials to AIOStreams:**
+   - In the AIOStreams web interface, go to the **"Services"** tab
+   - Find **Torbox** in the list of services
+   - Click **"Configure"** or **"Add"**
+   - Enter your Torbox API token
+   - Click **"Save"** or **"Test Connection"** to verify
+
+---
+
+## 6. Import AIOStreams Configuration
 
 The `aiostreams-config.json` file allows you to quickly set up your AIOStreams instance with your preferred settings and services. Follow these steps to import your configuration:
 
@@ -89,15 +179,15 @@ The `aiostreams-config.json` file allows you to quickly set up your AIOStreams i
 
 **Important Reminders:**
 - Before importing, ensure you have:
-  - Added your Real-Debrid credentials in the **Services** tab of the web interface.
-  - Entered the correct Mediaflow Proxy URL and password in the **Proxy** tab.
+  - Configured your Real-Debrid and Torbox credentials (see Section 5.5)
+  - Added the StremThru Proxy URL and password in the **Proxy** tab (see Section 5)
 - You can always update these settings after import if needed.
 
 **Editing Your Configuration in the Future:**
 - To edit your configuration later, you will need to log in to the AIOStreams web interface using your **UUID** and the **configuration password** you set during import. Make sure to keep these credentials safe.
 
 
-## Additional Notes
+## 7. Additional Notes
 
 - **Updates:** If you change any environment variables or configuration files, restart the containers:
   ```sh
